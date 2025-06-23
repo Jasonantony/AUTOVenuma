@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block head%}
+<style>
+    body {
+        background-image: url("{{ url_for('static', filename='assets/bgtop.jpg') }}");
+        background-size: cover;
+    }
+
+    label {
+        padding: 10px 5px 10px 5px;
+        color: #845EC2;
+    }
+
+    #signup {
+        background: transparent;
+        width: 80px;
+        height: 70px;
+        text-decoration: none;
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+        background-color: transparent;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    #licon {
+        width: 60px;
+        height: 50px;
+
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        min-width: fit-content;
+        margin: 60px;
+        border: 1.5px solid rgb(236, 105, 225);
+        box-shadow: 3px 4px 30px rgba(0, 0, 0, 0.1);
+        align-items: center;
+        border-radius: 10px;
+        background-color: #f8f6f8;
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        color: white;
+    }
+</style>
+{%endblock%}
+{% block body%}
+
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <img src="{{ url_for('static', filename='assets/login.png') }}" alt="">
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <form method="POST" action="/login">
+            <label for="Username">Username</label>
+            <input type="text" name="username" placeholder="Enter username" required><br><br>
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password" required><br><br>
+            <button type="submit" id="submit">
+                <img src="{{url_for('static', filename='assets/enter.png')}}" alt="login" id="licon">
+            </button>
+
+            <hr style="color: black;">
+            <small>Don't have an account</small>
+
+            <button>
+                <a href="{{ url_for('signin') }}">
+                    Sign In
+                </a>
+            </button>
+
+
+        </form>
+    </div>
+</div>
+
+
+{%endblock%}

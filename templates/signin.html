@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+
+{%block head%}
+<style>
+    .icon {
+        padding-left: 20px;
+
+    }
+
+    body {
+        background-color: white;
+    }
+
+    #user {
+        width: 80px;
+        height: 80px;
+    }
+
+    #submit {
+        size: 100px;
+    }
+
+    .submit-button {
+        width: 100px;
+        height: 40px;
+        background-color: #f0e9e9a9;
+        color: white;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+    }
+
+    input {
+        width: 270px;
+        height: 45px;
+        border-radius: 3px;
+
+    }
+
+    label {
+        font-size: 20px;
+        padding: 10px 5px;
+        color: #845EC2;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        margin: 10px 0 10px 10px;
+        border: 2px solid rgb(179, 173, 173);
+        align-items: center;
+        border-radius: 10px;
+        background-color: #fbeaff;
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        color: white;
+    }
+</style>
+
+
+
+{%endblock%}
+
+
+{% block body%}
+<div class="row">
+
+
+    <div class="col-6">
+        <img src="{{ url_for('static', filename='assets/Signup.png') }}" alt="icon" id="icon">
+    </div>
+
+    <div class="col-6">
+
+
+        <form action="{{ url_for('signin') }}" method="POST">
+            <img src="{{url_for('static',filename='assets/user.png')}}" alt="user" id="user">
+            <label for="Username">Username</label>
+
+            <input type="text" name="username" placeholder="Enter username" required>
+
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Enter email" required><br>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password" required><br>
+            <span id="passwordHelpInline" class="form-text">Must be 8-20 characters long.</span>
+
+
+
+            <button value="signin"> Sign In</button>
+
+
+
+
+        </form>
+    </div>
+</div>
+
+
+{%endblock%}

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    label {
+        color: chocolate;
+        font-size: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1.5px solid #3a3333;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        background-color: #f8f6f8;
+    }
+
+
+
+    #pickup,
+    #destination {
+        width: 500px;
+        padding: 10px;
+        margin: 10px 0;
+        margin-left: 30px;
+        border-radius: 10px;
+        box-shadow: 3px 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    #radio {
+        width: 900px;
+        padding: 10px;
+        display: block;
+
+
+    }
+
+    #submit {
+        background-color: blue;
+        color: white;
+        padding: 10px 20px;
+        font-size: 18px;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<h2 style="text-align:center;">Welcome, {{ user.username }}</h2>
+
+
+<h2>Welcome, {{ user.username }}</h2>
+
+<form id="bookingForm" onsubmit="calculateDistance(event)">
+    <label for="pickup">Pickup Location:</label>
+    <input type="text" id="pickup" name="pickup" required><br>
+
+    <label for="destination">Drop Location:</label>
+    <input type="text" id="destination" name="destination" required><br>
+
+    <label for="count">Passenger Count:</label>
+    <select id="count" name="count" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+    </select><br>
+
+    <label>Vehicle Type:</label><br>
+
+    <input type="radio" name="vehicle" value="Rear" checked id="radio"> Rear - <u>can travel upto 3</u>
+    <input type="radio" name="vehicle" value="Ape" id="radio"> Ape - <u>Can Travel upto 7</u><BR>
+    <button type="submit" id="submit">Book</button>
+
+</form>
+
+<hr>
+
+<div id="bill" style="display:none;">
+    <h3>Bill Details</h3>
+    <p><strong>Pickup Location:</strong> <span id="bill-pickup">---</span></p>
+    <p><strong>Drop Location:</strong> <span id="bill-drop">---</span></p>
+    <p><strong>Distance:</strong> <span id="bill-distance">---</span></p>
+    <p><strong>Amount:</strong> ₹<span id="bill-amount">---</span></p>
+    <p><strong>Date:</strong> <span id="bill-date">---</span></p>
+    <p><strong>Time:</strong> <span id="bill-time">---</span></p>
+</div>
+
+<div id="loader" style="display:none; text-align:center; margin-top: 20px;">
+    <p>🚕 Searching for a driver nearby...</p>
+</div>
+
+<div id="driver-details" style="display:none;">
+    <h3>Booking Confirmation</h3>
+    <div>
+        <p><strong>Driver Name:</strong> <span id="driverName">---</span></p>
+        <p><strong>Driver Phone:</strong> <span id="driverPhone">---</span></p>
+        <p><strong>Vehicle Number:</strong> <span id="vehicleNumber">---</span></p>
+        <p><strong>Confirmed:</strong> ✅</p>
+        <p><strong>Arrival Time:</strong> <span id="eta">---</span></p>
+    </div>
+</div>
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAz0TEiH9e2nH7eW_G8Fo5C5qdwrM_NvRU&libraries=places"></script>
+
+<script>
+    function calculateDistance(e) {
+        e.preventDefault();
+
+        const pickup = document.getElementById('pickup').value;
+        const drop = document.getElementById('destination').value;
+        const count = document.getElementById('count').value;
+        const vehicle = document.querySelector('input[name="vehicle"]:checked').value;
+
+        const service = new google.maps.DistanceMatrixService();
+
+        service.getDistanceMatrix({
+            origins: [pickup],
+            destinations: [drop],
+            travelMode: 'DRIVING',
+            unitSystem: google.maps.UnitSystem.METRIC,
+        }, function (response, status) {
+            if (status === "OK") {
+                const element = response.rows[0].elements[0];
+                if (element.status !== "OK") {
+                    alert("Error in route calculation: " + element.status);
+                    return;
+                }
+
+                const distanceText = element.distance.text;
+                const distanceValue = element.distance.value / 1000; // in KM
+
+                let fare = distanceValue <= 2 ? 50 : 50 + Math.ceil((distanceValue - 2) * 15);
+
+                fetch('/update_score', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fare: fare })
+                });
+
+                document.getElementById('bill').style.display = "block";
+                document.getElementById('bill-pickup').textContent = pickup;
+                document.getElementById('bill-drop').textContent = drop;
+                document.getElementById('bill-distance').textContent = distanceText;
+                document.getElementById('bill-amount').textContent = fare;
+                document.getElementById('bill-date').textContent = new Date().toLocaleDateString();
+                document.getElementById('bill-time').textContent = new Date().toLocaleTimeString();
+
+                document.getElementById('loader').style.display = "block";
+
+                fetch('/billing', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        name: "{{ user.username }}",
+                        phone: "{{ user.phone }}",
+                        pickup: pickup,
+                        drop: drop
+                    })
+                })
+                    .then(() => pollDriverStatus());
+            } else {
+                alert("Could not calculate distance. Error: " + status);
+            }
+        });
+    }
+
+    function pollDriverStatus() {
+        const interval = setInterval(() => {
+            fetch('/check_driver_status')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "confirmed") {
+                        clearInterval(interval);
+                        fetchDriverDetails();
+                    }
+                })
+                .catch(err => {
+                    console.error("Polling error:", err);
+                });
+        }, 3000);
+    }
+
+    function fetchDriverDetails() {
+        fetch('/get_confirmed_driver')
+            .then(res => res.json())
+            .then(driver => {
+                document.getElementById('loader').style.display = "none";
+                document.getElementById('driver-details').style.display = "block";
+                document.getElementById('driverName').textContent = driver.name;
+                document.getElementById('driverPhone').textContent = driver.phone;
+                document.getElementById('vehicleNumber').textContent = driver.vehicle;
+                document.getElementById('eta').textContent = driver.eta;
+            })
+            .catch(err => {
+                console.error("Driver fetch error:", err);
+            });
+    }
+
+    function initAutocomplete() {
+        new google.maps.places.Autocomplete(document.getElementById('pickup'));
+        new google.maps.places.Autocomplete(document.getElementById('destination'));
+    }
+    google.maps.event.addDomListener(window, 'load', initAutocomplete);
+</script>
+{% endblock %}

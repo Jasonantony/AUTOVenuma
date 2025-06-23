@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+<style>
+    section {
+        margin: 30px;
+    }
+
+    b {
+        color: rgb(224, 131, 55);
+        font-family: Kavoon;
+        justify-content: center;
+    }
+
+    b:hover {
+        color: red;
+        cursor: pointer;
+    }
+
+    .img-fluid {
+        width: 350px;
+        height: auto;
+        justify-content: center;
+
+
+
+    }
+
+    h4 {
+        font-family: Righteous;
+        color: black;
+        font-size: 1.4rem;
+    }
+
+    #abt {
+        margin: 90px;
+    }
+
+    body {
+        background-image: url("{{ url_for('static', filename='assets/bgtop.jpg') }}");
+        background-size: cover;
+    }
+
+    .accordion-item,
+    .accordion-header,
+    .accordion-button {
+        font-size: 20px;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        /* or your desired text color */
+    }
+
+    .accordion {
+        width: 1200px;
+        margin: 0 auto;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    h3 {
+        justify-content: center;
+        align-items: center;
+        margin-left: 49%;
+    }
+
+    .accordion-button:hover {
+        color: #FE7743;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{%block body%}
+<!-- Include Bootstrap in your <head> if not already -->
+
+<section>
+    <div class="container" id="abt">
+        <div class="row align-items-center">
+
+            <!-- Image Column -->
+            <div class="col-md-6 mb-4 mb-md-0">
+                <img src="{{ url_for('static', filename='assets/a.jpg') }}" alt="AUTO Venuma"
+                    class="img-fluid rounded shadow">
+            </div>
+
+            <!-- Text Column -->
+            <div class="col-md-6">
+                <h1 class="text-center mb-3" style="color: beige;">About <b>AUTO Venuma</b></h1>
+                <h4 class="text-center">
+                    <strong>AUTO Venuma</strong> is a user-friendly auto booking application designed specifically for
+                    the people of
+                    Salem. It offers the most affordable and quickest way to book autos, manage your rides, view your
+                    booking history, and make payments securely—all through your personalized profile.
+                </h4>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+<h3>FAQ's</h3>
+<section>
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+                    What is AUTO venuma?
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>AUTO Venuma</strong> is a reliable and user-friendly auto booking application designed
+                    specifically for the people of Salem. It offers the most affordable and quickest way to book
+                    autos, manage your rides, view your booking history, and make payments securely—all through your
+                    personalized profile.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Why to Choose this ?
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>AUTO Venuma</strong> stands out because it is tailored just for <strong>salem</strong>
+                    residents, ensuring fast and affordable rides. With a seamless booking process, easy payment
+                    options, and the ability to track your ride history, we make commuting hassle-free and
+                    convenient for you.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    How this works?
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    Simply create your profile on <b>AUTO Venuma</b>, choose your pickup and drop location, and book
+                    an auto instantly. You can view your past trips and make secure payments directly from your
+                    profile, making your travel smooth and efficient every time.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{%endblock%}

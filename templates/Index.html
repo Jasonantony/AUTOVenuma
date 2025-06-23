@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+
+
+{% block head %}
+<style>
+    body {
+        background-color: white;
+    }
+
+    .card-body {
+        background: transparent;
+        backdrop-filter: blur(10px);
+        border: 3px;
+        border-color: white;
+    }
+
+    .welcome {
+        background-image: url("{{ url_for('static', filename='assets/bgtop.jpg') }}");
+        background-size: cover;
+        height: 100vh;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .welcome h2,
+    .welcome h3,
+    .welcome p {
+        color: rgb(8, 7, 7);
+        text-align: center;
+        font-family: 'Spicy Rice', cursive;
+        margin-top: 80px;
+    }
+</style>
+{%endblock%}
+{%block body%}
+
+<div class="welcome">
+    <h2>🚖 Welcome to Auto Venuma!</h2>
+    <h3>Your ride to the city's heart starts here. 🌆</h3>
+    <p>Step into the world of hassle-free travel and hidden gems.<br>
+        Whether you're a local or a visitor, Auto Venuma is your trusted companion<br>
+        for exploring the vibrant streets<br>
+        of our beloved city. 🏙️<br>
+        Explore the city like never before — with comfort, speed, and a smile.<br>
+        From quick errands to scenic rides, we’ve got you covered.
+        Travel smart. Travel local. Travel with us.</p>
+    <p>🛺 Auto Venuma – Let’s go places, together. 🌍</p>
+
+</div>
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" style="margin: 30px;">
+
+        <!-- Card 1 -->
+        <div class="col">
+            <div class="card h-100 shadow" style="width: 100%;">
+                <img src="static/assets/1.jpg" class="card-img-top" alt="..."
+                    style="padding:4px 2px; height:200px; object-fit: cover;">
+                <div class="card-body">
+                    <h3>Instant Auto Booking</h3>
+                    <p class="card-text">Book autos in just a few taps. No waiting, no bargaining—just quick, reliable
+                        rides at your fingertips.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col">
+            <div class="card h-100 shadow" style="width: 100%;">
+                <img src="static/assets/salem.jpg" class="card-img-top" alt="..."
+                    style="padding:4px 2px; height:200px; object-fit: cover;">
+                <div class="card-body">
+                    <h3>Built for Salem</h3>
+                    <p class="card-text">AUTO Venuma is designed specifically for Salem people, offering local autos,
+                        local support, and lightning-fast bookings around the city.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col">
+            <div class="card h-100 shadow" style="width: 100%;">
+                <img src="static/assets/3.jpeg" class="card-img-top" alt="..."
+                    style="padding:4px 2px; height:200px; object-fit: cover;">
+                <div class="card-body">
+                    <h3>Track & Pay Securely</h3>
+                    <p class="card-text">Access all your ride history and make payments easily through your profile.
+                        Stay organized and in control.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="col">
+            <div class="card h-100 shadow" style="width: 100%;">
+                <img src="static/assets/4.jpeg" class="card-img-top" alt="..."
+                    style="padding:4px 2px; height:200px; object-fit: cover;">
+                <div class="card-body">
+                    <h3>Budget-Friendly Rides</h3>
+                    <p class="card-text">Enjoy the most affordable fares in town. No surge pricing. No hidden fees. Just
+                        fair and transparent rates.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{%endblock%}
